@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contex/auth.jsx";
 
 const Register = () => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -10,10 +12,11 @@ const Register = () => {
     password: "",
   });
 
-  const navigate = useNavigate;
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [token, setToken] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,7 +30,12 @@ const Register = () => {
     try {
       const res = await axios.post("http://localhost:5000/api/users/register", formData);
       setMessage(res.data.message || "User registered successfully!");
-      navigate("/")
+      // If registration returns a token, automatically log the user in
+      if (res.data.token) {
+        login(res.data.user || { email: formData.email, firstName: formData.firstName, lastName: formData.lastName }, res.data.token);
+        setToken(res.data.token); // Store token for display
+      }
+      navigate("/home")
     } catch (error) {
       setMessage(
         error.response?.data?.message || "Registration failed. Please try again."
@@ -104,6 +112,12 @@ const Register = () => {
 
         {message && (
           <p className="mt-4 text-center text-gray-700 font-medium">{message}</p>
+        )}
+        {token && (
+          <div className="mt-4 p-3 bg-green-100 border border-green-400 rounded">
+            <p className="text-green-800 font-medium">Token stored successfully!</p>
+            <p className="text-sm text-green-600 mt-1">Check localStorage and cookies for the token.</p>
+          </div>
         )}
       </div>
     </div>

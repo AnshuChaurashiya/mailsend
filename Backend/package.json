@@ -1,16 +1,17 @@
-{
+gi{
   "name": "mailcart",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@clerk/express": "^1.7.42",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
