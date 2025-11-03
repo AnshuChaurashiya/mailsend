@@ -1,87 +1,90 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
-// Create Auth Context
 const AuthContext = createContext();
 
- export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+// ✅ Custom hook
+export const useAuth = () => useContext(AuthContext);
 
-// Auth Provider Component
+// ✅ Provider
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true); // wait for auth check
 
-  // Function to set cookie
-  const setCookie = (name, value, days) => {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;secure;httponly`;
-  };
+  // Fetch user data from backend using stored token
+  const fetchUserData = async (storedToken) => {
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      };
+      const response = await axios.get(
+        "http://localhost:5000/api/users/me",
+        config
+      );
 
-  // Function to get cookie
-  const getCookie = (name) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-  };
-
-  // Function to delete cookie
-  const deleteCookie = (name) => {
-    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-  };
-
-  // Login function
-  const login = (userData, authToken) => {
-    setUser(userData);
-    setToken(authToken);
-    setIsAuthenticated(true);
-
-    localStorage.setItem('authToken', authToken);
-
-    setCookie('authToken', authToken, 7); 
-  };
-
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    setIsAuthenticated(false);
-
-    localStorage.removeItem('authToken');
-    deleteCookie('authToken');
-  };
-
-   const checkAuth = () => {
-    const storedToken = localStorage.getItem('authToken');
-    const cookieToken = getCookie('authToken');
-
-     if (storedToken && cookieToken && storedToken === cookieToken) {
-       setToken(storedToken);
-      setIsAuthenticated(true);
-     } else {
-       logout();
+      if (response.status === 200) {
+        const fetchedUser = response.data.user;
+        setUser(fetchedUser);
+        setIsAuthenticated(true);
+        localStorage.setItem("user", JSON.stringify(fetchedUser));
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      if (error.response?.status === 401) {
+        handleLogout();
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Check auth on component mount
+  // Load user/token from localStorage on mount
   useEffect(() => {
-    checkAuth();
+    const storedToken = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("user");
+
+    if (storedToken) {
+      setToken(storedToken);
+      setIsAuthenticated(true);
+      if (savedUser) setUser(JSON.parse(savedUser));
+
+      // refresh user info from server
+      fetchUserData(storedToken);
+    } else {
+      setLoading(false);
+    }
   }, []);
 
-  // Context value
+  // ✅ Login handler
+  const handleLogin = (userData, authToken) => {
+    setUser(userData);
+    setToken(authToken);
+    setIsAuthenticated(true);
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", authToken);
+  };
+
+  // ✅ Logout handler
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    setIsAuthenticated(false);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  };
+
+  console.log(user)
+
+  // ✅ Context value
   const value = {
     isAuthenticated,
     user,
     token,
-    login,
-    logout,
-    checkAuth,
+    loading,
+    login: handleLogin,
+    logout: handleLogout,
   };
 
   return (
@@ -91,5 +94,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Default export (can be removed if not needed)
 export default AuthProvider;

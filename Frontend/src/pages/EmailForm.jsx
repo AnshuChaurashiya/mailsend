@@ -66,7 +66,7 @@ const EmailForm = () => {
         return;
       }
 
-      const response = await axios.post(`http://localhost:5000/api/sendEmails`, {
+      const response = await axios.post(`http://localhost:5000/api/gmail/sendEmails`, {
         subject,
         message: body,
         recipients: emailList,
@@ -94,7 +94,7 @@ const EmailForm = () => {
   };
 
   return (
-    <div className="flex justify-center p-4 bg-gray-100 rounded-2xl w-full">
+    <div className="flex justify-center p-4 bg-gray-100 rounded-2xl mb-10 w-[96%] m-auto md:w-full">
       <form onSubmit={handleSubmit} className="w-full rounded-2xl">
         <h2 className="text-xl sm:text-2xl mb-2 font-bold text-black text-center">
           Send Bulk Emails

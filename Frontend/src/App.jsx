@@ -5,11 +5,13 @@ import Register from './pages/Register.jsx';
 import Login from "./pages/login.jsx";
 import EmailForm from './pages/EmailForm.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import Profile from "./components/Profile.jsx";
+
 
 // Wrap hooks inside a nested component
 const AppContent = () => {
   const location = useLocation();
-  const hideNavbar = location.pathname === "/register" || location.pathname === "/login";
+  const hideNavbar = location.pathname === "/" || location.pathname === "/login";
 
   return (
     <div className="container mx-auto mt-6 max-w-7xl">
@@ -18,8 +20,10 @@ const AppContent = () => {
       <Routes>
         <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/email" element={<ProtectedRoute><EmailForm /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/" element={<Register />} />
         <Route path="/login" element={<Login />} />
+
       </Routes>
     </div>
   );

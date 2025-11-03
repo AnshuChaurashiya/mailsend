@@ -1,10 +1,19 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contex/auth.jsx';
+ import { Navigate } from "react-router-dom";
+import { useAuth } from "../contex/auth.jsx";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
 
+  // Wait until auth status is known
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen text-gray-600 text-lg font-semibold">
+        Loading...
+      </div>
+    );
+  }
+
+  // Redirect if not authenticated
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
