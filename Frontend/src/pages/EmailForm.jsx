@@ -66,7 +66,7 @@ const EmailForm = () => {
         return;
       }
 
-      const response = await axios.post(`http://localhost:5000/api/gmail/sendEmails`, {
+      const response = await axios.post(`https://mailsend-spjk.onrender.com/api/gmail/sendEmails`, {
         subject,
         message: body,
         recipients: emailList,
