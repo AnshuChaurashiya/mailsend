@@ -28,7 +28,7 @@ const Register = () => {
     setMessage("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/users/register", formData);
+      const res = await axios.post("https://mailsend-spjk.onrender.com/api/users/register", formData);
       setMessage(res.data.message || "✅ User registered successfully!");
       if (res.data.token) {
         login(
