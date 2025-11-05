@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${storedToken}` },
       };
       const response = await axios.get(
-        "http://localhost:5000/api/users/me",
+        "https://mailsend-spjk.onrender.com/api/users/me",
         config
       );
 
