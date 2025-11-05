@@ -3,8 +3,8 @@ dotenv.config({ path: "./.env" });
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import userRouter from "./routes/user.routes.js";
-import emailRouter from "./routes/email.routes.js";
+import userRouter from "./src/Routes/user.routes.js";
+import emailRouter from "./src/Routes/email.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
