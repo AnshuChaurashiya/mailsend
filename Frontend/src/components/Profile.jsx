@@ -7,8 +7,8 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-100 text-gray-700">
-        <p className="text-lg font-medium">Loading user profile...</p>
+      <div className="flex justify-center items-center h-screen bg-gray-200 text-gray-700">
+        <p className="text-lg font-medium">Loading profile...</p>
       </div>
     );
   }
