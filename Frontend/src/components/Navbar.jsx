@@ -12,12 +12,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className=" flex w-full justify-between md:px-10 items-center px-3 mb-5 ">
-      <a href="/home" className="text-xl flex gap-1  uppercase ">MAIL CART
+    <nav className=" flex w-full justify-between md:px-10 items-center px-4 mb-6 ">
+      <a href="/home" className="text-xl flex gap-2  uppercase ">MAIL CART
       <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mails-icon lucide-mails"><path d="M17 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 1-1.732"/><path d="m22 5.5-6.419 4.179a2 2 0 0 1-2.162 0L7 5.5"/><rect x="7" y="3" width="15" height="12" rx="2"/></svg></span>
        </a>
       <div className="flex gap-4 items-center ">
-        <a  className=" px-2 py-2 bg-gray-200  rounded-full hover:scale-105 transition-all duration-300 "
+        <a  className=" px-2 py-2 bg-gray-300  rounded-full hover:scale-105 transition-all duration-300 "
         href="/profile"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
         {isAuthenticated && (
           <button
